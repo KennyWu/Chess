@@ -3,7 +3,6 @@ package entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.chess.Chessboard;
 
@@ -103,7 +102,13 @@ public abstract class Piece {
     }
 
 
-    public abstract boolean validateMove(String potentialPos);
+    public boolean validateMove(ChessBlock potentialPos) {
+        //Checks for opposing sides
+        if (potentialPos.getPiece() == null || !potentialPos.getPiece().getSide().equals(getSide())) {
+            return true;
+        }
+        return false;
+    }
 
     public String getPieceDescription() {
         return pieceDescription;

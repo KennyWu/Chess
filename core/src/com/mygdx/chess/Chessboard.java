@@ -164,7 +164,6 @@ public class Chessboard extends ApplicationAdapter implements InputProcessor {
 					hasPiece = false;
 				}
 			}
-
 		}
 		return false;
 	}
@@ -205,7 +204,6 @@ public class Chessboard extends ApplicationAdapter implements InputProcessor {
 		}
 		return false;
 	}
-
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		return false;

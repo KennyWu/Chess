@@ -7,6 +7,8 @@ import com.mygdx.chess.Chessboard;
 
 public class ChessBlock {
 
+
+    
     private String color;
     private Chessboard chessboard;
     private Rectangle chessBox;
@@ -113,6 +115,8 @@ public class ChessBlock {
             return false;
         }
         if(piece != null) {
+            if(!piece.validateMove(this))
+                return false;
             if(this.piece != null) {
                 this.piece.dead();
             }

@@ -1,7 +1,5 @@
 package entities;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 public class Rook extends Piece{
 
     public Rook(String pieceDescription, String currPos, float posX, float posY,
@@ -10,8 +8,8 @@ public class Rook extends Piece{
     }
 
     @Override
-    public boolean validateMove(String potentialPos) {
-        return false;
+    public boolean validateMove(ChessBlock potentialPos) {
+        return super.validateMove(potentialPos);
     }
 
 

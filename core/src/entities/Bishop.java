@@ -1,8 +1,7 @@
 package entities;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 public class Bishop extends Piece{
+
 
     public Bishop(String pieceDescription, String currPos, float posX,
                   float posY, int width, int height) {
@@ -10,8 +9,8 @@ public class Bishop extends Piece{
     }
 
     @Override
-    public boolean validateMove(String potentialPos) {
-        return false;
+    public boolean validateMove(ChessBlock potentialPos) {
+        return super.validateMove(potentialPos);
     }
 
 }
