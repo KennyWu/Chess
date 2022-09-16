@@ -20,6 +20,7 @@ public abstract class Piece {
     private int height;
     private String fullName;
     private boolean isDead;
+    protected ChessBlock currBlock;
 
     /**
      *
@@ -43,7 +44,10 @@ public abstract class Piece {
         this.pieceDescription = pieceDescription;
         fullName = createPieceName(pieceDescription);
         createTexture();
+    }
 
+    public void setChessBlock(ChessBlock block) {
+        currBlock = block;
     }
 
     public void dead() {

@@ -5,10 +5,15 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.chess.Chessboard;
 
+import java.util.HashMap;
+
 public class ChessBlock {
 
 
-    
+    public enum ADJACENT {
+        TOP, BOT, RIGHT, LEFT, TOP_RIGHT, BOT_RIGHT, TOP_LEFT, BOT_LEFT
+    }
+    HashMap<ADJACENT, ChessBlock> adjacentBlocks;
     private String color;
     private Chessboard chessboard;
     private Rectangle chessBox;
@@ -20,20 +25,9 @@ public class ChessBlock {
     private float height;
     private float width;
     private Piece piece;
-    private final String pos;
+    public final String pos;
 
-//    public ChessBlock(boolean isWhite, int row, int column,
-//                      Chessboard chessboard, String pieceDescription) {
-//        color = isWhite? "white" : "black";
-//        this.chessboard = chessboard;
-//        this.pos = returnPos(row, column);
-//        height = chessboard.HEIGHT_CHESSBOARD/chessboard.CHESS_ROWS;
-//        width = chessboard.WIDTH_CHESSBOARD/chessboard.CHESS_COLUMNS;
-//        y = 800 - (height*(row-1)) - height/2;
-//        x = width * (column - 1) + width/2;
-//        createPiece(pieceDescription);
-//
-//    }
+
     public ChessBlock(boolean isWhite, int row, int column,
                       Chessboard chessboard) {
         color = isWhite? "white" : "black";
@@ -45,6 +39,7 @@ public class ChessBlock {
         x = width * (column - 1) + width/2;
         chessBox = new Rectangle(x-width/2, y-height/2, width, height);
         piece = null;
+        adjacentBlocks = new HashMap<>();
     }
 
     /**
@@ -82,9 +77,12 @@ public class ChessBlock {
                 break;
 
         }
+        piece.setChessBlock(this);
     }
 
-
+    public void fillAdjacent(ChessBlock block, ADJACENT adjacent) {
+        adjacentBlocks.put(adjacent, block);
+    }
 
     /**
      * Return description of the chess position
@@ -123,6 +121,7 @@ public class ChessBlock {
             this.piece = piece;
             this.piece.setNewPos(x,y);
             this.piece.setCurrPos(pos);
+            this.piece.setChessBlock(this);
             return true;
         }
         return false;
@@ -218,6 +217,13 @@ public class ChessBlock {
             }
         }
 
+    }
+
+    public ChessBlock getAdjacentBlock(ADJACENT adjacent) {
+        return adjacentBlocks.get(adjacent);
+    }
+    public boolean equals(ChessBlock block) {
+        return pos.equals(block.pos);
     }
 
     public boolean contains(float x, float y) {

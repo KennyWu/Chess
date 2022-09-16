@@ -79,6 +79,7 @@ public class Chessboard extends ApplicationAdapter implements InputProcessor {
 			}
 			drawwhite = !drawwhite;
 		}
+		linkBlocks();
 	}
 
 	public ShapeRenderer getShapeRenderer() {
@@ -133,6 +134,40 @@ public class Chessboard extends ApplicationAdapter implements InputProcessor {
 				chessBlocks[i][j].dispose();
 			}
 		}
+	}
+
+	/**
+	 * Adds references to all adjacent blocks to the block
+	 */
+	private void linkBlocks() {
+		for(int i = 0; i < chessBlocks.length; i++) {
+			for(int j = 0; j < chessBlocks[0].length; j++) {
+				ChessBlock block = chessBlocks[i][j];
+				//right
+				block.fillAdjacent(getBlock(i,j+1), ChessBlock.ADJACENT.RIGHT);
+				//left
+				block.fillAdjacent(getBlock(i,j-1), ChessBlock.ADJACENT.LEFT);
+				//top
+				block.fillAdjacent(getBlock(i-1,j), ChessBlock.ADJACENT.TOP);
+				//bot
+				block.fillAdjacent(getBlock(i+1,j), ChessBlock.ADJACENT.BOT);
+				//botleft
+				block.fillAdjacent(getBlock(i+1,j-1), ChessBlock.ADJACENT.BOT_LEFT);
+				//botright
+				block.fillAdjacent(getBlock(i+1,j+1), ChessBlock.ADJACENT.BOT_RIGHT);
+				//topleft
+				block.fillAdjacent(getBlock(i-1,j-1), ChessBlock.ADJACENT.TOP_LEFT);
+				//topright
+				block.fillAdjacent(getBlock(i-1,j+1), ChessBlock.ADJACENT.TOP_RIGHT);
+			}
+		}
+	}
+	private ChessBlock getBlock(int i, int j) {
+		if(i < 0 || i >= chessBlocks.length ||
+				j < 0 || j >= chessBlocks[0].length) {
+			return null;
+		}
+		return chessBlocks[i][j];
 	}
 
 	@Override
