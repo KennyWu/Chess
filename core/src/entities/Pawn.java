@@ -27,24 +27,25 @@ public class Pawn extends Piece {
             return false;
         }
         if(direction == DIRECTION.BOT) {
-            block = currBlock.getAdjacentBlock(ChessBlock.ADJACENT.BOT);
-            if(validateBlock(potentialPos, block)) {
-                return true;
-            }
-            block = block.getAdjacentBlock(ChessBlock.ADJACENT.BOT);
-            if (firstMove && validateBlock(potentialPos, block)) {
-                return true;
-            }
-            firstMove = false;
-        }
-        if(direction == DIRECTION.TOP) {
-            block = currBlock.getAdjacentBlock(ChessBlock.ADJACENT.TOP);
-            if(validateBlock(potentialPos, block)) {
+            if(validateBlock(potentialPos, ChessBlock.ADJACENT.BOT)) {
                 firstMove = false;
                 return true;
             }
-            block = block.getAdjacentBlock(ChessBlock.ADJACENT.TOP);
-            if (firstMove && validateBlock(potentialPos, block)) {
+            //diagonal check for enemy pieces
+            if(validateBlock(potentialPos, ChessBlock.ADJACENT.BOT_LEFT) ||
+                    validateBlock(potentialPos, ChessBlock.ADJACENT.BOT_RIGHT)) {
+                firstMove = false;
+                return true;
+            }
+        }
+        if(direction == DIRECTION.TOP) {
+            if(validateBlock(potentialPos, ChessBlock.ADJACENT.TOP)) {
+                firstMove = false;
+                return true;
+            }
+            //diagonal check of enemy pieces
+            if(validateBlock(potentialPos, ChessBlock.ADJACENT.TOP_LEFT) ||
+                    validateBlock(potentialPos, ChessBlock.ADJACENT.TOP_RIGHT)) {
                 firstMove = false;
                 return true;
             }
@@ -52,20 +53,34 @@ public class Pawn extends Piece {
         return false;
     }
 
-    private boolean validateBlock( ChessBlock potentialPos, ChessBlock block) {
-        if(block != null ) {
-            if (block.getPiece() == null) {
-                if (block.equals(potentialPos)) {
+    /**
+     * Checks if the block ahead contains pieces or doesn't exist
+     * @param potentialPos
+     * @param
+     * @return
+     */
+    private boolean validateBlock(ChessBlock potentialPos, ChessBlock.ADJACENT direction) {
+        ChessBlock block = currBlock.getAdjacentBlock(direction);
+        if (block == null) {
+            return false;
+        }
+        if (block.getPiece() == null) {
+            if (block.equals(potentialPos)) {
+                return true;
+            }
+            if (firstMove) {
+                block = block.getAdjacentBlock(direction);
+                if (block.getPiece() == null && block.equals(potentialPos)) {
                     return true;
                 }
             }
         }
+        if((block.getPiece() != null)) {
+            if (block.equals(potentialPos)) {
+                return true;
+            }
+        }
         return false;
 
     }
-
-
-
-
-
 }
