@@ -12,7 +12,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import entities.ChessBlock;
 import entities.Piece;
 
-
+/**
+ * TODO - UNIT TESTING - DEBUGGER MODE - RESET MODE
+ */
 public class Chessboard extends ApplicationAdapter implements InputProcessor {
 
 	public static int HEIGHT_CHESSBOARD;
@@ -49,7 +51,7 @@ public class Chessboard extends ApplicationAdapter implements InputProcessor {
 		boolean readSpawn = true;
 		FileHandle file = Gdx.files.internal("settings/white_side_spawn.txt");
 		String pieces = file.readString();
-		String[] piece = pieces.split("\r\n");
+		String[] piece = pieces.split("\n");
 		int pieceIndex = 0;
 		String pieceDescription = "";
 		String piecePos = "";
@@ -101,9 +103,52 @@ public class Chessboard extends ApplicationAdapter implements InputProcessor {
 		return null;
 	}
 
-	public void returnPiece() {
-
-	}
+    /**
+     * TODO - get non gui test data to work
+     * TODO - current piece data initialization is linked to texture initialization
+     * Leads to memory issues when not proper disposed Nor isn't needed
+     */
+	public void initTestData() {
+        turn = "W";
+        selectedPiece = null;
+        hasPiece = false;
+        origBlock = null;
+        chessBlocks = new ChessBlock[CHESS_ROWS][CHESS_COLUMNS];
+        piecePosMap = new ArrayMap<Piece, ChessBlock>();
+        boolean drawwhite = true;
+        boolean readSpawn = true;
+        FileHandle file = Gdx.files.internal("settings/white_side_spawn.txt");
+        String pieces = file.readString();
+        String[] piece = pieces.split("\n");
+        int pieceIndex = 0;
+        String pieceDescription = "";
+        String piecePos = "";
+        for(int i = 0; i < 8; i++){
+            for(int j = 0; j < 8; j++){
+                drawwhite = !drawwhite;
+                if(drawwhite){
+                    chessBlocks[i][j] = new ChessBlock(true,
+                    i + 1, j + 1, this);
+                }else{
+                    chessBlocks[i][j] = new ChessBlock(false,
+                    i + 1, j + 1, this);
+                }
+                if(readSpawn){
+                    pieceDescription = piece[pieceIndex];
+                    piecePos = pieceDescription.substring(4);
+                }
+                //I dont believe the if statement ever evaluates to true - debug
+                if(piecePos.equals(chessBlocks[i][j].getPosition())){
+                    chessBlocks[i][j].createPiece(pieceDescription);
+                    piecePosMap.put(chessBlocks[i][j].getPiece(), chessBlocks[i][j]);
+                    readSpawn = true;
+                    pieceIndex++;
+                }else{
+                    readSpawn = false;
+                }
+            }
+        }
+    }
 
 	@Override
 	public void render () {
